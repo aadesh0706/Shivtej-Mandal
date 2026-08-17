@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shivtej Mandal — Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Mukta:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  :root{
+    --maroon-950:#210509; --maroon-900:#33090E; --maroon-800:#4E0E17; --maroon-700:#6B1420;
+    --gold-300:#DDBD6C; --gold-500:#C89B3C; --gold-700:#8C6A26;
+    --saffron-400:#F0A94E; --saffron-500:#E8871E; --saffron-600:#C86F14;
+    --peacock-500:#0F5C56;
+    --cream-50:#FFFDF9; --cream-100:#F7EFE1;
+    --ink:#2A1810;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Mukta',sans-serif;background:var(--cream-50);color:var(--ink);}
+  .font-display{font-family:'Yatra One',serif;}
+  .font-number{font-family:'Poppins',sans-serif;}
+  a{color:inherit;}
+
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:30;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 24px;background:rgba(51,9,14,0.7);backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(140,106,38,0.3);
+  }
+  header .name{font-family:'Yatra One',serif;font-size:1.3rem;color:var(--gold-300);}
+  .lang-toggle{display:inline-flex;align-items:center;border:1px solid rgba(221,189,108,0.6);border-radius:999px;padding:4px;background:rgba(255,255,255,0.06);}
+  .lang-toggle button{border:none;background:none;border-radius:999px;padding:6px 14px;font-weight:600;font-size:0.85rem;cursor:pointer;color:var(--cream-100);transition:.2s;}
+  .lang-toggle button.active{background:var(--gold-500);color:var(--maroon-900);}
+
+  .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;
+    background:linear-gradient(to bottom,var(--maroon-950),var(--maroon-800) 55%,var(--maroon-700));}
+  #hero-canvas{position:absolute;inset:0;}
+  .hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at center, rgba(200,155,60,0.25) 0%, rgba(107,20,32,0) 70%);pointer-events:none;}
+  .hero-inner{position:relative;z-index:2;max-width:760px;margin:0 auto;text-align:center;padding:96px 24px 40px;}
+  .eyebrow{text-transform:uppercase;letter-spacing:.2em;color:var(--saffron-400);font-size:.85rem;font-weight:600;margin-bottom:16px;}
+  h1{font-family:'Yatra One',serif;font-size:3rem;line-height:1.15;color:var(--cream-50);margin:0 0 20px;}
+  .sub{color:rgba(247,239,225,0.8);font-size:1.1rem;max-width:520px;margin:0 auto 28px;}
+  .days{font-family:'Poppins',sans-serif;color:var(--gold-300);font-size:.9rem;margin-bottom:28px;}
+  .cta{border:none;border-radius:999px;padding:16px 40px;font-family:'Yatra One',serif;font-size:1.15rem;color:var(--maroon-900);
+    background:linear-gradient(to right,var(--saffron-500),var(--gold-500));box-shadow:0 20px 40px -10px rgba(51,9,14,0.5);cursor:pointer;}
+  .cta:hover{filter:brightness(1.1);}
+
+  .progress-wrap{max-width:520px;margin:52px auto 0;}
+  .progress-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .progress-top .label{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(247,239,225,0.6);}
+  .progress-top .amount{font-family:'Poppins',sans-serif;font-weight:600;font-size:1.6rem;color:var(--gold-300);}
+  .progress-top .right{text-align:right;font-size:.85rem;color:rgba(247,239,225,0.7);}
+  .bar-track{height:12px;border-radius:999px;background:rgba(51,9,14,0.6);border:1px solid rgba(140,106,38,0.4);overflow:hidden;}
+  .bar-fill{height:100%;border-radius:999px;background:linear-gradient(to right,var(--saffron-500),var(--gold-500),var(--gold-300));transition:width .7s ease-out;}
+
+  .warli{height:18px;background-color:var(--cream-50);
+    background-image:repeating-linear-gradient(to right,var(--gold-500) 0,var(--gold-500) 2px,transparent 2px,transparent 14px),
+    repeating-linear-gradient(to right,transparent 0,transparent 7px,var(--gold-700) 7px,var(--gold-700) 9px,transparent 9px,transparent 14px);
+    background-position:center;background-repeat:repeat-x;background-size:14px 2px,14px 8px;opacity:.6;}
+
+  .form-section{padding:72px 20px;max-width:560px;margin:0 auto;}
+  .card{border:1px solid rgba(200,155,60,0.5);background:var(--cream-50);border-radius:20px;padding:32px;box-shadow:0 20px 45px -20px rgba(42,24,16,0.3);}
+  .card h3{font-family:'Yatra One',serif;color:var(--maroon-700);font-size:1.5rem;margin:0 0 4px;}
+  .card p.desc{color:rgba(42,24,16,0.6);font-size:.9rem;margin:0 0 24px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  .grid2 .full{grid-column:1/-1;}
+  label{display:block;font-size:.85rem;font-weight:600;color:rgba(42,24,16,0.8);margin-bottom:6px;}
+  input{width:100%;border:1px solid rgba(42,24,16,0.15);border-radius:10px;padding:10px 14px;font-family:'Mukta',sans-serif;font-size:.95rem;outline:none;}
+  input:focus{border-color:var(--gold-500);}
+  .amount-label{margin-bottom:8px;}
+  .presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .preset{border:1px solid rgba(42,24,16,0.15);border-radius:999px;padding:8px 16px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.85rem;background:none;cursor:pointer;transition:.15s;}
+  .preset.active{border-color:var(--maroon-700);background:var(--maroon-700);color:var(--cream-50);}
+  .pay-btn{width:100%;border:none;border-radius:999px;padding:15px;font-family:'Yatra One',serif;font-size:1.15rem;letter-spacing:.02em;color:var(--cream-50);
+    background:linear-gradient(to right,var(--maroon-700),var(--maroon-800),var(--saffron-600));cursor:pointer;box-shadow:0 15px 30px -12px rgba(107,20,32,0.5);}
+  .pay-btn:hover{filter:brightness(1.1);}
+  .footnote{text-align:center;font-size:.75rem;color:rgba(42,24,16,0.5);margin-top:16px;}
+
+  .donors{background:var(--maroon-900);padding:44px 0;}
+  .donors h3{text-align:center;font-family:'Yatra One',serif;color:var(--gold-300);font-size:1.5rem;margin:0 0 24px;}
+  .marquee-wrap{overflow:hidden;}
+  .marquee{display:flex;width:max-content;gap:16px;animation:scroll 26s linear infinite;}
+  .marquee:hover{animation-play-state:paused;}
+  @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  .donor-chip{flex-shrink:0;display:flex;align-items:center;gap:10px;border:1px solid rgba(140,106,38,0.5);background:rgba(78,14,23,0.6);border-radius:12px;padding:12px 16px;}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--saffron-500);flex-shrink:0;}
+  .donor-chip .n{color:var(--cream-100);font-weight:500;font-size:.9rem;}
+  .donor-chip .city{color:rgba(247,239,225,0.6);}
+  .donor-chip .amt{font-family:'Poppins',sans-serif;color:var(--gold-300);font-weight:600;font-size:.9rem;}
+
+  footer{background:var(--maroon-950);color:rgba(247,239,225,0.6);text-align:center;font-size:.85rem;padding:32px 20px;}
+  footer .mname{font-family:'Yatra One',serif;color:var(--gold-300);font-size:1.15rem;margin-bottom:4px;}
+  footer a{text-decoration:underline;text-underline-offset:2px;}
+
+  .badge{position:fixed;bottom:14px;right:14px;z-index:40;background:rgba(42,24,16,0.85);color:var(--cream-50);font-size:.7rem;padding:6px 12px;border-radius:999px;font-family:'Mukta',sans-serif;}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="name" id="mandalName">श्री शिवतेज मंडळ</span>
+  <div class="lang-toggle">
+    <button id="btn-mr" class="active" onclick="setLang('mr')">मराठी</button>
+    <button id="btn-en" onclick="setLang('en')">English</button>
+  </div>
+</header>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <p class="eyebrow" data-i18n="heroEyebrow"></p>
+    <h1 data-i18n="heroTitle"></h1>
+    <p class="sub" data-i18n="heroSubtitle"></p>
+    <p class="days"><span id="daysNum"></span> <span data-i18n="days"></span></p>
+    <button class="cta" data-i18n="heroCta" onclick="document.getElementById('donate').scrollIntoView({behavior:'smooth'})"></button>
+
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <div>
+          <p class="label" data-i18n="goalLabel"></p>
+          <p class="amount">₹1,24,350</p>
+        </div>
+        <div class="right">
+          <p class="label"><span id="donorCount">47</span> <span data-i18n="donorsLabel"></span></p>
+          <p><span data-i18n="goalOf"></span> ₹2,00,000</p>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:62%"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="warli"></div>
+
+<section class="form-section" id="donate">
+  <div class="card">
+    <h3 data-i18n="formTitle"></h3>
+    <p class="desc" data-i18n="formSubtitle"></p>
+
+    <div class="grid2">
+      <div class="full">
+        <label data-i18n="nameLabel"></label>
+        <input id="nameInput" type="text" placeholder="रमेश जोशी" />
+      </div>
+      <div>
+        <label data-i18n="phoneLabel"></label>
+        <input type="tel" placeholder="९८XXXXXXXX" />
+      </div>
+      <div>
+        <label data-i18n="emailLabel"></label>
+        <input type="email" />
+      </div>
+      <div>
+        <label data-i18n="cityLabel"></label>
+        <input type="text" placeholder="पुणे" />
+      </div>
+      <div>
+        <label data-i18n="messageLabel"></label>
+        <input type="text" placeholder="गणपती बाप्पा मोरया!" />
+      </div>
+    </div>
+
+    <label class="amount-label" data-i18n="amountLabel"></label>
+    <div class="presets" id="presets">
+      <button class="preset" data-val="51">₹51</button>
+      <button class="preset active" data-val="101">₹101</button>
+      <button class="preset" data-val="251">₹251</button>
+      <button class="preset" data-val="501">₹501</button>
+      <button class="preset" data-val="1001">₹1001</button>
+    </div>
+    <input type="text" id="customAmount" data-i18n-ph="customAmount" style="margin-bottom:24px;" />
+
+    <button class="pay-btn"><span data-i18n="payButton"></span> · ₹<span id="payAmt">101</span></button>
+    <p class="footnote" data-i18n="footerNote"></p>
+  </div>
+</section>
+
+<section class="donors">
+  <h3 data-i18n="recentDonorsTitle"></h3>
+  <div class="marquee-wrap">
+    <div class="marquee" id="marquee"></div>
+  </div>
+</section>
+
+<footer>
+  <p class="mname" id="mandalNameFooter">श्री शिवतेज मंडळ</p>
+  <p data-i18n="footerNote"></p>
+  <p style="margin-top:10px;"><a href="#">Admin</a></p>
+</footer>
+
+<div class="badge">Preview — sample data, not connected to a real database</div>
+
+<script>
+const dict = {
+  mr:{
+    heroEyebrow:"श्री गणेशोत्सव २०२६", heroTitle:"बाप्पाच्या चरणी वर्गणी अर्पण करा",
+    heroSubtitle:"स्थापना १४ सप्टेंबर, विसर्जन २५ सप्टेंबर — तुमच्या योगदानाने उत्सव अधिक भव्य होतो.",
+    heroCta:"आत्ता वर्गणी भरा", goalLabel:"आतापर्यंत जमा", goalOf:"उद्दिष्टापैकी", donorsLabel:"देणगीदार",
+    formTitle:"वर्गणी अर्पण करा", formSubtitle:"तुमचे नाव आणि रक्कम टाका, पेमेंट करा आणि पावती लगेच डाउनलोड करा.",
+    nameLabel:"पूर्ण नाव", phoneLabel:"मोबाईल नंबर", emailLabel:"ईमेल (ऐच्छिक)", cityLabel:"गाव / शहर (ऐच्छिक)",
+    messageLabel:"शुभेच्छा संदेश (ऐच्छिक)", amountLabel:"रक्कम (₹)", customAmount:"इतर रक्कम", payButton:"पेमेंट करा",
+    recentDonorsTitle:"अलीकडील देणगीदार", footerNote:"ही देणगी नोंद पावती आहे, आयकर सवलत पावती नाही.", days:"दिवस"
+  },
+  en:{
+    heroEyebrow:"Ganeshotsav 2026", heroTitle:"Offer Your Vargani to Bappa",
+    heroSubtitle:"Sthapana on 14th September, Visarjan on 25th September — your contribution makes the celebration grander.",
+    heroCta:"Donate Now", goalLabel:"Raised so far", goalOf:"of goal", donorsLabel:"donors",
+    formTitle:"Make Your Vargani", formSubtitle:"Enter your name and amount, pay, and download your receipt instantly.",
+    nameLabel:"Full name", phoneLabel:"Mobile number", emailLabel:"Email (optional)", cityLabel:"City / Village (optional)",
+    messageLabel:"A message (optional)", amountLabel:"Amount (₹)", customAmount:"Custom amount", payButton:"Pay Now",
+    recentDonorsTitle:"Recent Donors", footerNote:"This is a donation receipt, not an income-tax exemption certificate.", days:"days"
+  }
+};
+
+function setLang(lang){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[lang][key]) el.textContent = dict[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-ph');
+    if(dict[lang][key]) el.placeholder = dict[lang][key];
+  });
+  document.getElementById('btn-mr').classList.toggle('active', lang==='mr');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  document.documentElement.lang = lang;
+}
+setLang('mr');
+
+// Days until Sthapana (14 Sept 2026)
+const target = new Date('2026-09-14T00:00:00');
+const now = new Date();
+const diffDays = Math.ceil((target - new Date(now.toDateString())) / 86400000);
+document.getElementById('daysNum').textContent = diffDays > 0 ? diffDays : 0;
+
+// Donor wall sample data
+const sampleDonors = [
+  {name:"रमेश जोशी", city:"पुणे", amount:501},
+  {name:"Suvarna Patil", city:"Mumbai", amount:1001},
+  {name:"अजय कुलकर्णी", city:"पुणे", amount:251},
+  {name:"Nikhil Deshmukh", city:null, amount:101},
+  {name:"संगीता शिंदे", city:"पिंपरी", amount:2100},
+  {name:"Prasad More", city:"Pune", amount:501},
+];
+const marquee = document.getElementById('marquee');
+[...sampleDonors, ...sampleDonors].forEach(d=>{
+  const chip = document.createElement('div');
+  chip.className = 'donor-chip';
+  chip.innerHTML = `<span class="dot"></span><div><div class="n">${d.name}${d.city?` <span class="city">· ${d.city}</span>`:''}</div><div class="amt">₹${d.amount.toLocaleString('en-IN')}</div></div>`;
+  marquee.appendChild(chip);
+});
+
+// Amount presets
+let currentAmount = 101;
+document.querySelectorAll('.preset').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('customAmount').value='';
+    currentAmount = Number(btn.dataset.val);
+    document.getElementById('payAmt').textContent = currentAmount;
+    updateEmphasis();
+  });
+});
+document.getElementById('customAmount').addEventListener('input', (e)=>{
+  document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));
+  currentAmount = Number(e.target.value.replace(/[^0-9]/g,'')) || 0;
+  document.getElementById('payAmt').textContent = currentAmount;
+  updateEmphasis();
+});
+
+// ---- Three.js hero scene: glowing core + orbiting "modaks" ----
+const canvas = document.getElementById('hero-canvas');
+const heroSection = document.querySelector('.hero');
+const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+camera.position.set(0,0,7);
+
+function resize(){
+  const w = heroSection.clientWidth, h = heroSection.clientHeight;
+  renderer.setSize(w,h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+  camera.aspect = w/h; camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize); resize();
+
+scene.add(new THREE.AmbientLight(0xF7EFE1, 0.5));
+const pLight1 = new THREE.PointLight(0xE8871E, 1.4); pLight1.position.set(4,4,4); scene.add(pLight1);
+const pLight2 = new THREE.PointLight(0x0F5C56, 0.6); pLight2.position.set(-4,-2,-3); scene.add(pLight2);
+
+const core = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(1.3, 3),
+  new THREE.MeshStandardMaterial({color:0xC89B3C, emissive:0x8C6A26, emissiveIntensity:0.6, roughness:0.25, metalness:0.7, wireframe:false})
+);
+scene.add(core);
+const coreWire = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(1.32, 1),
+  new THREE.MeshBasicMaterial({color:0xF0A94E, wireframe:true, transparent:true, opacity:0.25})
+);
+scene.add(coreWire);
+
+const modakDefs = [
+  {radius:2.2, speed:0.5, offset:0, yTilt:0.4, scale:1},
+  {radius:2.6, speed:-0.35, offset:1.4, yTilt:0.6, scale:0.85},
+  {radius:3.0, speed:0.28, offset:2.8, yTilt:0.3, scale:1.1},
+  {radius:2.4, speed:-0.45, offset:4.2, yTilt:0.5, scale:0.75},
+  {radius:3.2, speed:0.2, offset:5.5, yTilt:0.45, scale:0.95},
+];
+const modaks = modakDefs.map(d=>{
+  const mesh = new THREE.Mesh(
+    new THREE.SphereGeometry(0.16,16,16),
+    new THREE.MeshStandardMaterial({color:0xF7EFE1, emissive:0xC89B3C, emissiveIntensity:0.15, roughness:0.4})
+  );
+  scene.add(mesh);
+  return {mesh, ...d, targetScale:d.scale};
+});
+
+let emphasisIndex = null;
+function updateEmphasis(){
+  const intensity = Math.min(1, currentAmount/2001);
+  emphasisIndex = intensity > 0 ? Math.min(4, Math.floor(intensity*5)) : null;
+  modaks.forEach((m,i)=>{
+    const emph = i===emphasisIndex;
+    m.mesh.material.color.set(emph ? 0xE8871E : 0xF7EFE1);
+    m.mesh.material.emissive.set(emph ? 0xC86F14 : 0xC89B3C);
+    m.mesh.material.emissiveIntensity = emph ? 0.5 : 0.15;
+    m.targetScale = emph ? m.scale*1.6 : m.scale;
+  });
+}
+updateEmphasis();
+
+const clock = new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+  core.rotation.y = t*0.25; core.rotation.x = Math.sin(t*0.3)*0.15;
+  coreWire.rotation.y = -t*0.15;
+  core.position.y = Math.sin(t*0.6)*0.15;
+  coreWire.position.y = core.position.y;
+
+  modaks.forEach(m=>{
+    const tt = t*m.speed + m.offset;
+    m.mesh.position.set(Math.cos(tt)*m.radius, Math.sin(tt*1.3)*m.yTilt, Math.sin(tt)*m.radius);
+    const s = THREE.MathUtils.lerp(m.mesh.scale.x, m.targetScale, 0.05);
+    m.mesh.scale.set(s,s,s);
+  });
+
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+</body>
+</html>
