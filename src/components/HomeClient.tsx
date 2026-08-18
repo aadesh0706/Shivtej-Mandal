@@ -182,6 +182,17 @@ export default function HomeClient({ initial }: HomeClientProps) {
           </a>
           , CC BY-SA 4.0, via Wikimedia Commons
         </p>
+        <p className="mt-1 text-xs text-cream-200/35">
+          Built by{" "}
+          <a
+            href="https://wa.me/919923608616?text=Hi"
+            className="underline underline-offset-2 hover:text-gold-300"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Aadesh Gulumbe
+          </a>
+        </p>
       </footer>
     </main>
   );
