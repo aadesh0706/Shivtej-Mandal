@@ -186,7 +186,7 @@ export default function HomeClient({ initial }: HomeClientProps) {
           Built by{" "}
           <a
             href="https://wa.me/919923608616?text=Hi"
-            className="underline underline-offset-2 hover:text-gold-300"
+            className="text-sm font-bold underline underline-offset-2 hover:text-gold-300"
             target="_blank"
             rel="noopener noreferrer"
           >
